@@ -45,20 +45,38 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 15mm; /* Standard printer margins */
+                margin: 12mm 15mm; /* Adjusted standard printer margins */
             }
-            body {
-                background-color: white;
-                margin: 0;
-                padding: 0;
+            body, html {
+                background-color: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                height: auto !important;
             }
             .a4-container {
-                width: auto;
-                min-height: auto;
-                margin: 0;
-                padding: 0;
-                box-shadow: none;
+                width: 100% !important;
+                min-height: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                position: static !important; /* Fixes layout context issues */
             }
+            
+            /* --- CRITICAL BUG FIX FOR CHROME PRINT ENGINE --- */
+            /* Chrome has a bug where 'display: grid' combined with page breaks 
+               causes massive blank pages. We convert grids to flexbox for print. */
+            .grid {
+                display: flex !important;
+                flex-direction: row !important;
+                flex-wrap: nowrap !important;
+            }
+            .grid-cols-2 > div {
+                flex: 1 1 50% !important;
+                width: 50% !important;
+                max-width: 50% !important;
+            }
+            /* ------------------------------------------------- */
+            
             .no-print {
                 display: none !important;
             }
@@ -84,7 +102,7 @@
     <div class="a4-container">
         
         <!-- HEADER / LETTERHEAD -->
-        <header class="flex justify-between items-center border-b-2 border-[#8b6131] pb-6 mb-8 avoid-break">
+        <header class="flex justify-between items-center border-b-2 border-[#8b6131] pb-6 mb-8">
             <!-- Left: English Details -->
             <div class="font-english text-xs text-gray-600 space-y-1 w-1/3 text-left">
                 <p class="font-bold text-gray-800 text-sm">Emhan Bakery Jeddah for Bread Co.</p>
@@ -108,7 +126,7 @@
         </header>
 
         <!-- TITLE -->
-        <div class="text-center mb-10 avoid-break">
+        <div class="text-center mb-10">
             <h1 class="text-3xl font-bold font-english text-[#8b6131] uppercase tracking-wider mb-2">Internal Work Regulation</h1>
             <h2 class="text-3xl font-bold font-arabic text-[#8b6131] uppercase tracking-wider">لائحة تنظيم العمل الداخلية</h2>
         </div>
